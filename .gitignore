@@ -1,0 +1,20 @@
+# Backup dan database berisi data
+backup/
+database/*.sql
+
+# File cadangan aplikasi
+*.bak
+*.backup
+*.backup-checkout
+
+# File rahasia
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# File sistem
+.DS_Store
+Thumbs.db
+docker-compose.yml

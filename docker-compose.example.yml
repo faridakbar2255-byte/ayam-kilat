@@ -1,0 +1,49 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8081:80"
+    environment:
+      DB_HOST: proxysql
+      DB_PORT: 6033
+      DB_NAME: db_ayam_kilat
+      DB_USER: ayam_user
+      DB_PASS: ${DB_PASS}
+    depends_on:
+      - proxysql
+    restart: unless-stopped
+    networks:
+      - ayam_network
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: db_ayam_kilat
+      MYSQL_USER: ayam_user
+      MYSQL_PASSWORD: ${DB_PASS}
+    volumes:
+      - ayam_db_data:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - ayam_network
+
+  proxysql:
+    image: proxysql/proxysql:2.7.3
+    ports:
+      - "6034:6033"
+    volumes:
+      - ayam_proxysql_data:/var/lib/proxysql
+    restart: unless-stopped
+    networks:
+      - ayam_network
+
+networks:
+  ayam_network:
+    name: ayam_kilat_network
+
+volumes:
+  ayam_db_data:
+    name: ayam_kilat_db_data
+  ayam_proxysql_data:
+    name: ayam_kilat_proxysql_data
